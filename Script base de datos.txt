@@ -1,0 +1,83 @@
+CREATE DATABASE nexos
+    WITH 
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'Spanish_Colombia.1252'
+    LC_CTYPE = 'Spanish_Colombia.1252'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1;
+	
+CREATE TABLE public.post
+(
+    id character varying NOT NULL,
+    name character varying NOT NULL,
+    PRIMARY KEY (id)
+);
+
+ALTER TABLE IF EXISTS public.post
+    OWNER to postgres;
+	
+CREATE TABLE public.users
+(
+    id character varying NOT NULL,
+    name character varying NOT NULL,
+    id_post character varying NOT NULL,
+    age integer NOT NULL,
+    admission_date timestamp without time zone NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT id_post FOREIGN KEY (id_post)
+        REFERENCES public.post (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+);
+
+ALTER TABLE IF EXISTS public.users
+    OWNER to postgres;
+	
+CREATE TABLE public.merchandise
+(
+    id character varying NOT NULL,
+    name character varying NOT NULL,
+    quantity integer NOT NULL,
+    entry_date timestamp without time zone NOT NULL,
+    user_id character varying NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT user_id FOREIGN KEY (user_id)
+        REFERENCES public."user" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+);
+
+ALTER TABLE IF EXISTS public.merchandise
+    OWNER to postgres;
+	
+CREATE TABLE public.history
+(
+    id character varying NOT NULL,
+    id_user character varying NOT NULL,
+    date timestamp without time zone NOT NULL,
+	commentary character varying NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT id_user FOREIGN KEY (id_user)
+        REFERENCES public."user" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+);
+
+ALTER TABLE IF EXISTS public.history
+    OWNER to postgres;
+	
+INSERT INTO public.post(
+	id, name)
+	VALUES ('1','Asesor de ventas');
+	
+INSERT INTO public.post(
+	id, name)
+	VALUES ('2','Administrador');
+
+INSERT INTO public.post(
+	id, name)
+	VALUES ('3','Soporte');
